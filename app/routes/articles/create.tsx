@@ -4,6 +4,7 @@ import type { FC } from "hono/jsx";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { buttonClass, errorClass, formClass, inputClass, labelClass, textareaClass, titleClass } from "../../style.css";
+import { createArticle } from "../../lib/db";
  
 
 const Article = z.object({
@@ -68,11 +69,13 @@ export default createRoute((c) => {
 
 // POSTリクエストの処理
 export const POST = createRoute(
-  zValidator("form", Article, (result, c) => {
+  zValidator("form", Article, async (result, c) => {
     
     if (result.success) {
       // TODO DB に保存
-      console.log(result.data);
+      const { title, content } = result.data;
+      await createArticle({ title, content })
+
       return c.redirect("/articles")
     }
 
