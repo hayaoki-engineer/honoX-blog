@@ -27,9 +27,25 @@ export const createArticle = async ({
   return article;
 };
 
-export const getArticles = async () => {
+export const getArticles = async (rows: number, page: number) => {
   const articlesJSON = await fs.readFile("./data/articles.json", {
     encoding: "utf-8",
   });
-  return JSON.parse(articlesJSON);
+
+  const articles = JSON.parse(articlesJSON);
+  // 求めるページのデータ数 + 1
+  const limit = rows + 1;
+  // 取得するデータの開始位置
+  const offset = (page - 1) * rows; 
+
+  // ページに必要なデータを取得
+  const paginatedArticles = articles.slice(offset, offset + limit);
+  // 次のページが存在するかチェック
+  const hasNext = paginatedArticles.length === limit;
+
+  return {
+    // 最後の要素を削除して返す
+    articles: hasNext ? paginatedArticles.slice(0, -1) : paginatedArticles,
+    hasNext,
+  };
 };

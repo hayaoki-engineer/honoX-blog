@@ -3,10 +3,12 @@ import { card, cards, titleClass } from "../style.css";
 import { Article } from "../lib/db";
 
 type Props = {
-  articles: Article[];
+  articles: Article[],
+  hasNext: boolean,
+  currentPage: number
 };
 
-const Page: FC<Props> = ({ articles }) => {
+const Page: FC<Props> = ({ articles, hasNext, currentPage }) => {
   return (
     <div>
       <h1 class={titleClass}>Articles</h1>
@@ -17,6 +19,8 @@ const Page: FC<Props> = ({ articles }) => {
           </li>
         ))}
       </ul>
+      <div>{currentPage > 1 ? <a href={`/articles?page=${currentPage - 1}`}>前のページ</a> : null}</div>
+      <div>{hasNext ? <a href={`/articles?page=${currentPage + 1}`}>次のページ</a> : null}</div>
     </div>
   );
 };

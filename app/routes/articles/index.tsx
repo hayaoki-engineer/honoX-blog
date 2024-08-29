@@ -5,11 +5,18 @@ import Page from "../../islands/page";
 
 export default createRoute(async (c) => {
 
+  const rows = 5
+  const page = Number.parseInt(c.req.query('page') ?? '1', 10)
+  console.log('ページ', page)
+
   // サーバーサイドでデータを取得
-  const articles = await getArticles();
+  const res = await getArticles(rows, page);
+
+  console.log('ページに必要なデータの数', res.articles.length)
+  console.log('次のページが存在しているか', res.hasNext)
   
   return c.render(
-    <Page articles={articles} />, 
+    <Page articles={res.articles} hasNext={res.hasNext} currentPage={page} />, 
     {
       title: "Articles",
     }
