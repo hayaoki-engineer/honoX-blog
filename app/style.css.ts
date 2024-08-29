@@ -47,3 +47,17 @@ export const errorClass = css`
   color: red;
   font-size: 0.75rem;
 `;
+
+export const cards = css`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+`;
+
+export const card = css`
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 1rem;
+  width: 100%;
+  list-style: none;
+`;

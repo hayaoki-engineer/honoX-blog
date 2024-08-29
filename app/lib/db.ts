@@ -26,3 +26,10 @@ export const createArticle = async ({
 
   return article;
 };
+
+export const getArticles = async () => {
+  const articlesJSON = await fs.readFile("./data/articles.json", {
+    encoding: "utf-8",
+  });
+  return JSON.parse(articlesJSON);
+};
