@@ -12,7 +12,7 @@ export default createRoute(async (c) => {
   // サーバーサイドでデータを取得
   const res = await getArticles(rows, page);
 
-  
+  console.log('ページに必要なデータの数', res.articles.length)
   console.log('次のページが存在している', res.hasNext)
   
   return c.render(
