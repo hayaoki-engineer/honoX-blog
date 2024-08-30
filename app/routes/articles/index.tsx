@@ -13,7 +13,7 @@ export default createRoute(async (c) => {
   const res = await getArticles(rows, page);
 
   console.log('ページに必要なデータの数', res.articles.length)
-  console.log('次のページが存在しているか', res.hasNext)
+  console.log('次のページが存在している', res.hasNext)
   
   return c.render(
     <Page articles={res.articles} hasNext={res.hasNext} currentPage={page} />, 
