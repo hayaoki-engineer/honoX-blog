@@ -3,9 +3,17 @@ import { createRoute } from "honox/factory";
 import type { FC } from "hono/jsx";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { buttonClass, errorClass, formClass, inputClass, labelClass, textareaClass, titleClass } from "../../style.css";
+import {
+  buttonClass,
+  errorClass,
+  formClass,
+  inputClass,
+  labelClass,
+  textareaClass,
+  titleClass,
+} from "../../style.css";
 import { createArticle } from "../../lib/db";
- 
+import ArticlesPageContainer from "../../islands/ArticlesPageContainer";
 
 const Article = z.object({
   title: z.string().min(1).max(255),
@@ -25,7 +33,7 @@ type Data = {
 
 type Props = {
   data?: Data;
-}
+};
 
 const Page: FC<Props> = ({ data }) => {
   return (
@@ -65,18 +73,18 @@ export default createRoute((c) => {
   return c.render(<Page />, {
     title: "Create an article",
   });
-})
+});
 
 // POSTリクエストの処理
 export const POST = createRoute(
   zValidator("form", Article, async (result, c) => {
-    
+
     if (result.success) {
       // TODO DB に保存
       const { title, content } = result.data;
-      await createArticle({ title, content })
+      await createArticle({ title, content });
 
-      return c.redirect("/articles")
+      return c.redirect("/articles?success=true");
     }
 
     // バリデーションの結果
@@ -95,6 +103,5 @@ export const POST = createRoute(
     return c.render(<Page data={data} />, {
       title: "Create an article",
     });
-
   })
 );
