@@ -2,6 +2,7 @@ import { createRoute } from "honox/factory";
 import { getArticles } from "../../lib/db";
 import Page from "../../islands/ArticlesPageContainer";
 import ArticlesPageContainer from "../../islands/ArticlesPageContainer";
+import { deleteCookie, getCookie } from "hono/cookie";
 
 export default createRoute(async (c) => {
   const rows = 5;
@@ -11,14 +12,21 @@ export default createRoute(async (c) => {
   // サーバーサイドでデータを取得
   const res = await getArticles(rows, page);
 
-  console.log("ページに必要なデータの数", res.articles.length);
-  console.log("次のページが存在している", res.hasNext);
+  const success = getCookie(c, "success");
+  console.log("成功状態", success);
 
-  const success = c.req.query("success") ?? null;
-  console.log('成功状態', success)
+  // クッキーを削除して再表示を防止
+  if (success) {
+    deleteCookie(c, "success", { path: "/articles" });
+  }
 
   return c.render(
-    <ArticlesPageContainer articles={res.articles} hasNext={res.hasNext} currentPage={page} success={success} />,
+    <ArticlesPageContainer
+      articles={res.articles}
+      hasNext={res.hasNext}
+      currentPage={page}
+      success={success}
+    />,
     {
       title: "Articles",
     }
