@@ -7,14 +7,14 @@ type Props = {
   articles: Article[];
   hasNext: boolean;
   currentPage: number;
-  success: string | null;
+  success: string | undefined;
 };
 
 const ArticlesPageContainer: FC<Props> = ({ articles, hasNext, currentPage, success }) => {
   const[showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    if (success) {
+    if (success === 'true') {
       setShowToast(true);
     }
   }, [success]);
