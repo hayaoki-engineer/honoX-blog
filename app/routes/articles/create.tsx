@@ -14,6 +14,7 @@ import {
 } from "../../style.css";
 import { createArticle } from "../../lib/db";
 import ArticlesPageContainer from "../../islands/ArticlesPageContainer";
+import { setCookie } from "hono/cookie";
 
 const Article = z.object({
   title: z.string().min(1).max(255),
@@ -80,11 +81,16 @@ export const POST = createRoute(
   zValidator("form", Article, async (result, c) => {
 
     if (result.success) {
-      // TODO DB に保存
+      // データベース に保存
       const { title, content } = result.data;
       await createArticle({ title, content });
 
-      return c.redirect("/articles?success=true");
+      setCookie(c, "success", "true", {
+        path: "/articles",
+        httpOnly: true,
+      });
+
+      return c.redirect("/articles");
     }
 
     // バリデーションの結果
