@@ -27,6 +27,7 @@ export const createArticle = async ({
   return article;
 };
 
+// 記事の取得とページネーション
 export const getArticles = async (rows: number, page: number) => {
   const articlesJSON = await fs.readFile("./data/articles.json", {
     encoding: "utf-8",
