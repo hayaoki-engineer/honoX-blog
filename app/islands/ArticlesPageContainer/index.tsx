@@ -1,7 +1,17 @@
 import { FC, useEffect, useState } from "hono/jsx";
 import { card, cards, titleClass } from "../../style.css";
-import { Article } from "../../lib/db";
+// import { Article } from "../../lib/db";
 import Toast from "../Toast";
+import { z } from "zod";
+
+// スキーマ作成
+export const articleSchema = z.object({
+  id: z.string(),
+  title: z.string()
+})
+
+// 型定義
+export type Article = z.infer<typeof articleSchema >
 
 type Props = {
   articles: Article[];
